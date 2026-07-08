@@ -1,7 +1,9 @@
-// Buggy on purpose: parseAmount strips a leading currency symbol but not the
-// thousands separators, so "1,234.50" becomes NaN. This is BUG-1042.
+// parseAmount strips a leading currency symbol and thousands separators, then
+// converts the remaining string to a Number.
 export function parseAmount(input) {
-  const stripped = String(input).replace(/^[$€£]/, "");
+  const stripped = String(input)
+    .replace(/^[$€£]/, "")
+    .replace(/,/g, "");
   const value = Number(stripped);
   if (Number.isNaN(value)) {
     throw new Error(`invalid amount: ${input}`);
